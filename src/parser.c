@@ -1,6 +1,10 @@
+/// \file   parser.c
+/// \author Gonçalo Marques
+/// \date   2023-05
+
 #include "include/parser.h"
 
-line_t* read_lines(char* filename, FILE* file){
+line_t* read_lines(FILE* file){
     char *line_buf = NULL;
     size_t line_buf_size = 0;
     size_t line_size = 0;
@@ -8,7 +12,7 @@ line_t* read_lines(char* filename, FILE* file){
 
     if (file == NULL)
     {
-        fprintf(stderr, "Could not open file %s\n", filename);
+        fprintf(stderr, "Could not open file\n");
         return 0;
     }
 
