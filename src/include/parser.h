@@ -1,6 +1,6 @@
 /// \file   parser.h
 /// \author Gonçalo Marques
-/// \date   2023-05
+/// \date   2024-01
 
 #pragma once
 #include <stdlib.h>
@@ -20,8 +20,8 @@ typedef enum TokenType {
 
 /// @brief Line Content - A struct type for representing the content of a line, read from a file and/or stream.
 typedef struct lineContent {
-    const char* content;
-    size_t line_size;
+    char* content;
+    ssize_t line_size;
 } line_t;
 //TODO: NEXT LINE? TO BE MORE EFFICIENT?
 
@@ -32,10 +32,9 @@ typedef struct Token {
     int length;
 } token_t;
 
-/// @brief              - Returns a pointer to a line_t struct, reading from a file or stream.
+/// @brief              - Reads line from a file or stream to the allocated line_t.
 /// @param file         - Pointer to the file to read lines from.
-/// @return             - line_t* (pointer to a line_t struct)
-line_t* read_lines(FILE* file);
+void read_lines(line_t* line, FILE* file);
 
 /// @brief              - Returns a pointer to a token_t struct, reading from an input/line to be analysed.
 /// @param input        - Pointer to the line to read tokens from.

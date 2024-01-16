@@ -1,26 +1,18 @@
 /// \file   parser.c
 /// \author Gonçalo Marques
-/// \date   2023-05
+/// \date   2024-01
 
 #include "include/parser.h"
 
-line_t* read_lines(FILE* file){
-    char *line_buf = NULL;
+void read_lines(line_t* line, FILE* file){
     size_t line_buf_size = 0;
-    size_t line_size = 0;
-    line_t* line = malloc(sizeof(line_t));
 
     if (file == NULL)
     {
         fprintf(stderr, "Could not open file\n");
-        return 0;
     }
 
-    line_size = getline(&line_buf, &line_buf_size, file);
-    line->line_size = line_size;
-    line->content = line_buf;
-
-    return line;
+    line->line_size = getline(&line->content, &line_buf_size, file);
 }
 
 token_t* lexer(const char* input){

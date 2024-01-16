@@ -1,6 +1,6 @@
-/// \file   threading.c
+/// \file   tree.c
 /// \author Gonçalo Marques
-/// \date   2023-05
+/// \date   2024-01
 
 #include "include/tree.h"
 
@@ -16,9 +16,13 @@ static char* strdup(const char* str) {
 tree_t* createNode(token_type_t type, char* value) {
     tree_t* node = malloc(sizeof(tree_t));
     node->type = type;
-    node->value = strdup(value);
+    node->content = strdup(value);
     node->parent = NULL;
     node->children = NULL;
     node->next = NULL;
     return node;
+}
+
+void addChild(tree_t* parent, tree_t* child){
+
 }

@@ -1,25 +1,15 @@
 /// \file   threading.c
 /// \author Gonçalo Marques
-/// \date   2023-05
+/// \date   2024-01
 #include "include/threading.h"
 
-/* static char* string_from_pointer(const char* start, int length) {
-    // Allocate memory for the string, plus space for the null terminator
-    char* result = malloc(length + 1);
-    if (result == NULL) {
-        return NULL;
-    }
-    strncpy(result, start, length);
-    result[length] = '\0';
-    return result;
-} */
-
 void* do_work(void* params){
+    sem_wait(&semaphore);
+
     params_t* s_params = (params_t*)params;
     int tid = s_params->thread_id;
     printf("Thread %d started\n", tid);
 
-    line_t* line = NULL;
     FILE* file = fopen(s_params->filename, "r");
     token_t* token = NULL;
 
@@ -28,8 +18,12 @@ void* do_work(void* params){
         fprintf(stderr, "Could not open file %s\n", s_params->filename);
         return 0;
     }
+
+    line_t* line = malloc(sizeof(line_t));
+    line->line_size = 0;
+    line->content = NULL;
     
-    line = read_lines(file);
+    read_lines(line, file);
     const char* input = line->content;
     while(line->line_size > 0){
         putchar('\n');
@@ -40,17 +34,20 @@ void* do_work(void* params){
             putchar('\n');
             input = token->start + token->length;
         } while(token->type != TOKEN_TYPE_EOL);
-        line = read_lines(file);
+        read_lines(line, file);
         input = line->content;
         if(line->line_size == -1) break;
     }
 
     fclose(file);
+    free(line->content);
     free(line);
     free(token);
     line = NULL;
+    token = NULL;
 
     printf("Thread %d finished\n", tid);
+    sem_post(&semaphore);
 
     return NULL;
 }
