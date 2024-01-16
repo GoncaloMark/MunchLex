@@ -1,7 +1,7 @@
 OUTPUT_DIR := Debug
 OUTPUT_FILE := ${OUTPUT_DIR}/munchlex
 
-C_SRC := src/main.c src/parser.c src/threading.c
+C_SRC := src/main.c src/parser.c src/threading.c src/tree.c
 
 C_OBJS := $(C_SRC:%.c=${OUTPUT_DIR}/%.o)
 

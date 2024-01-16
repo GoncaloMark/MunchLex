@@ -29,7 +29,7 @@ typedef struct lineContent {
 typedef struct Token {
     token_type_t type;
     const char* start;
-    int length;
+    size_t length;
 } token_t;
 
 /// @brief              - Reads line from a file or stream to the allocated line_t.

@@ -2,6 +2,7 @@
 /// \author Gonçalo Marques
 /// \date   2024-01
 #include "include/threading.h"
+#include "include/tree.h"
 
 void* do_work(void* params){
     sem_wait(&semaphore);
@@ -25,13 +26,34 @@ void* do_work(void* params){
     
     read_lines(line, file);
     const char* input = line->content;
+
+    tree_t* head = NULL;
+    tree_t* current = head;
+    tree_t* previous = NULL;
+
     while(line->line_size > 0){
         putchar('\n');
         printf("Content: %s\n", line->content);
         do {
             token = lexer(input);
-            printf("Token type: %d, Token value: %.*s", token->type, token->length, token->start);
+            printf("Token type: %d, Token value: %.*s", token->type, (int)token->length, token->start);
             putchar('\n');
+
+            tree_t* newNode = createNode(token->type, token->start, token->length);
+
+            if(head == NULL){
+                head = newNode;
+                current = head;
+            } else {
+                if(token->type == TOKEN_TYPE_TAG_NAME) {
+                    addChild(current, newNode);
+                    previous = current;
+                    current = newNode; 
+                } else if(token->type == TOKEN_TYPE_END) {
+                    current = previous;
+                }
+            }
+
             input = token->start + token->length;
         } while(token->type != TOKEN_TYPE_EOL);
         read_lines(line, file);
@@ -39,12 +61,17 @@ void* do_work(void* params){
         if(line->line_size == -1) break;
     }
 
+    printTree(head, 0);
+    putchar('\n');
+
     fclose(file);
     free(line->content);
     free(line);
     free(token);
     line = NULL;
     token = NULL;
+
+    deleteTree(head);
 
     printf("Thread %d finished\n", tid);
     sem_post(&semaphore);
