@@ -3,9 +3,10 @@
 /// \date   2024-01
 
 #include "include/parser.h"
+#include "include/tree.h"
 
-/// @brief              - Reads line from a file or stream to the allocated line_t.
-/// @param file         - Pointer to the file to read lines from.
+/// @brief Reads line from a file or stream to the allocated line_t.
+/// @param file Pointer to the file to read lines from.
 static void read_lines(line_t* line, FILE* file){
     size_t line_buf_size = 0;
 
@@ -17,9 +18,9 @@ static void read_lines(line_t* line, FILE* file){
     line->line_size = getline(&line->content, &line_buf_size, file);
 }
 
-/// @brief              - Returns a pointer to a token_t struct, reading from an input/line to be analysed.
-/// @param input        - Pointer to the line to read tokens from.
-/// @return             - token_t* (pointer to a token_t struct)
+/// @brief Returns a pointer to a token_t struct, reading from an input/line to be analysed.
+/// @param input Pointer to the line to read tokens from.
+/// @return token_t* (pointer to a token_t struct)
 static token_t* lexer(const char* input){
     static int prev_length;
     token_t* token = malloc(sizeof(token_t));
@@ -70,8 +71,8 @@ static token_t* lexer(const char* input){
 
 void* munchLex(void* params){
     params_t* s_params = (params_t*)params;
-    int tid = s_params->thread_id;
-    printf("Thread %d started\n", tid);
+    // int tid = s_params->thread_id;
+    // printf("Thread %d started\n", tid);
 
     FILE* file = fopen(s_params->filename, "r");
     token_t* token = NULL;
@@ -135,7 +136,7 @@ void* munchLex(void* params){
 
     deleteTree(head);
 
-    printf("Thread %d finished\n", tid);
+    // printf("Thread %d finished\n", tid);
 
     return NULL;
 }

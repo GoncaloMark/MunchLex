@@ -10,7 +10,6 @@
 /// @brief Struct holding the parameters passed to the working thread.
 typedef struct Params {
     char* filename;
-    int thread_id;
 } params_t;
 
 /// @brief An enum type for representing different token types for the lexer to catalogue.
