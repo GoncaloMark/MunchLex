@@ -1,2 +1,2 @@
 #!/bin/bash
-./Debug/munchlex test/index.html test/index1.html
+../Debug/munchlex -f test/index.html test/index1.html -t 7 -p static

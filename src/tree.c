@@ -7,8 +7,12 @@
 
 tree_t* createNode(token_type_t type, const char* start, size_t length) {
     tree_t* node = malloc(sizeof(tree_t));
+    if (node == NULL)
+        return NULL;
 
     node->content = malloc(length + 1);
+    if (node->content == NULL)
+        return NULL;
     strncpy(node->content, start, length);
     node->content[length] = '\0';
 
