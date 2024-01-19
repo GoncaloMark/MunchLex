@@ -1,2 +1,2 @@
 #!/bin/bash
-./Debug/munchlex test/index.html test/index1.html
+../Debug/munchlex ./index.html ./index1.html
