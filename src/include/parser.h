@@ -7,7 +7,13 @@
 #include <stdio.h>
 #include <ctype.h>
 
-/// @brief Token Type - An enum type for representing different token types for the lexer to catalogue.
+/// @brief Struct holding the parameters passed to the working thread.
+typedef struct Params {
+    char* filename;
+    char* logFile;
+} params_t;
+
+/// @brief An enum type for representing different token types for the lexer to catalogue.
 typedef enum TokenType {
     TOKEN_TYPE_EOL,
     TOKEN_TYPE_END,
@@ -18,26 +24,21 @@ typedef enum TokenType {
 } token_type_t;
 
 
-/// @brief Line Content - A struct type for representing the content of a line, read from a file and/or stream.
+/// @brief A struct type for representing the content of a line, read from a file and/or stream.
 typedef struct lineContent {
     char* content;
     ssize_t line_size;
 } line_t;
-//TODO: NEXT LINE? TO BE MORE EFFICIENT?
+//TODO: Buffer NEXT LINE? TO BE MORE EFFICIENT?
 
-/// @brief Token - A struct type for representing a single token read from a file and/or stream.
+/// @brief A struct type for representing a single token read from a file and/or stream.
 typedef struct Token {
     token_type_t type;
     const char* start;
     size_t length;
 } token_t;
 
-/// @brief              - Reads line from a file or stream to the allocated line_t.
-/// @param file         - Pointer to the file to read lines from.
-void read_lines(line_t* line, FILE* file);
-
-/// @brief              - Returns a pointer to a token_t struct, reading from an input/line to be analysed.
-/// @param input        - Pointer to the line to read tokens from.
-/// @return             - token_t* (pointer to a token_t struct)
-token_t* lexer(const char* input);
+/// @brief Function used to lex and parse the HTML language into a Syntax Tree, this is the work function that will be published to the thread pool work list, arguments will be dynamic this way.
+/// @param params A void pointer to be cast to params_t
+void munchLex(void* args);
 
