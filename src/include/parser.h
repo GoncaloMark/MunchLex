@@ -10,6 +10,7 @@
 /// @brief Struct holding the parameters passed to the working thread.
 typedef struct Params {
     char* filename;
+    char* logFile;
 } params_t;
 
 /// @brief An enum type for representing different token types for the lexer to catalogue.
@@ -39,5 +40,5 @@ typedef struct Token {
 
 /// @brief Function used to lex and parse the HTML language into a Syntax Tree, this is the work function that will be published to the thread pool work list, arguments will be dynamic this way.
 /// @param params A void pointer to be cast to params_t
-void* munchLex(void* params);
+void munchLex(void* args);
 

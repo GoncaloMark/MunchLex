@@ -22,7 +22,7 @@ static void read_lines(line_t* line, FILE* file){
 /// @param input Pointer to the line to read tokens from.
 /// @return token_t* (pointer to a token_t struct)
 static token_t* lexer(const char* input){
-    static int prev_length;
+    int prev_length = 0;
     token_t* token = malloc(sizeof(token_t));
     if (token == NULL)
         return NULL;
@@ -69,10 +69,9 @@ static token_t* lexer(const char* input){
     return token;
 }
 
-void* munchLex(void* params){
-    params_t* s_params = (params_t*)params;
-    // int tid = s_params->thread_id;
-    // printf("Thread %d started\n", tid);
+void munchLex(void* args){
+    printf("Working...\n");
+    params_t* s_params = (params_t*)args;
 
     FILE* file = fopen(s_params->filename, "r");
     token_t* token = NULL;
@@ -80,7 +79,7 @@ void* munchLex(void* params){
     if (file == NULL)
     {
         fprintf(stderr, "Could not open file %s\n", s_params->filename);
-        return 0;
+        return;
     }
 
     line_t* line = malloc(sizeof(line_t));
@@ -124,8 +123,7 @@ void* munchLex(void* params){
         if(line->line_size == -1) break;
     }
 
-    printTree(head, 0);
-    putchar('\n');
+    printTree(head, 0, s_params->logFile); // Set 3rd argument to NULL if you want it printed on stout
 
     fclose(file);
     free(line->content);
@@ -136,7 +134,5 @@ void* munchLex(void* params){
 
     deleteTree(head);
 
-    // printf("Thread %d finished\n", tid);
-
-    return NULL;
+    return;
 }

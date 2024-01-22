@@ -56,20 +56,43 @@ void deleteTree(tree_t* head) {
     free(head);
 }
 
-void printTree(const tree_t* node, int depth) {
+void printTree(const tree_t* node, int depth, char* file) {
     if (node == NULL) {
         return;
     }
 
-    for (int i = 0; i < depth; i++) {
-        printf("  ");
+    if(file == NULL){
+        for (int i = 0; i < depth; i++) {
+            printf("  ");
+        }
+
+        printf("Type: %d, Content: %s\n", node->type, node->content ? node->content : "(null)");
+
+        for (size_t i = 0; i < node->children_count; i++) {
+            printTree(node->children[i], depth + 1, NULL);
+        }
+
+        return;
     }
 
-    printf("Type: %d, Content: %s\n", node->type, node->content ? node->content : "(null)");
+    FILE* fp = fopen(file, "a");
+    if (fp == NULL) {
+        perror("Unable to open log file");
+        return;
+    }
+
+    for (int i = 0; i < depth; i++) {
+        fprintf(fp, "  ");
+    }
+
+    fprintf(fp, "Type: %d, Content: %s\n", node->type, node->content ? node->content : "(null)");
+    fclose(fp);
 
     for (size_t i = 0; i < node->children_count; i++) {
-        printTree(node->children[i], depth + 1);
+        printTree(node->children[i], depth + 1, file); //TODO: optimize this since it will keep opening and closing the file :(
     }
+
+    return;
 }
 
 
