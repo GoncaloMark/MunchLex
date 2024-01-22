@@ -107,7 +107,7 @@ void munchLex(void* args){
                 head = newNode;
                 current = head;
             } else {
-                if(token->type == TOKEN_TYPE_TAG_NAME) {
+                if(token->type == TOKEN_TYPE_TAG_NAME || token->type == TOKEN_TYPE_TEXT) {
                     addChild(current, newNode);
                     previous = current;
                     current = newNode; 
