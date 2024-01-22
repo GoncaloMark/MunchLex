@@ -10,10 +10,14 @@ int main(int argc, char *argv[]){
     argc--;
     argv++;
 
-    if (argc < 2) return EXIT_FAILURE;
+    if (argc < 2){
+        return EXIT_FAILURE;
+    } 
 
     flagger_t* flags = parseArgs(argv, argc);
-    if (flags == NULL) return EXIT_FAILURE;
+    if (flags == NULL){
+        return EXIT_FAILURE;
+    } 
 
     bool hasFileFlag = false;
     int threads = 2;
@@ -29,7 +33,7 @@ int main(int argc, char *argv[]){
             case ARG_TYPE_THREADS:
                 threads = atoi(flags[i].value);
                 if(threads == 0){
-                    return EXIT_FAILURE;
+                    threads = 2;
                 }
                 break;
             case ARG_TYPE_PARSER:
@@ -55,12 +59,58 @@ int main(int argc, char *argv[]){
 
     printf("Create pool with %d threads.\n", threads);
     printf("Number of Files: %ld.\n", files);
-    printf("File Names:\n");
 
     for(int i=0; flags[i].key == ARG_TYPE_FILE; i++){
         params[i].filename = flags[i].value;
-        printf("%s\n", params[i].filename);
+
+        size_t logFileSize = strlen(params[i].filename) + strlen("_log.txt") + 1;
+        params[i].logFile = malloc(logFileSize * sizeof(char));
+        if (params[i].logFile == NULL) {
+            fprintf(stderr, "Error: Memory allocation failed for logFile.\n");
+            free(flags);
+            for (int j = 0; j < i; j++) {
+                free(params[j].logFile);
+            }
+            return EXIT_FAILURE;
+        }
+
+        sprintf(params[i].logFile, "%s_log.txt", flags[i].value);
+        printf("Filename: %s\n", params[i].filename);
+        printf("LogFile: %s\n", params[i].logFile);
+
+        FILE* fp = fopen(params[i].logFile, "w");
+        if (fp == NULL) {
+            perror("Unable to create log file");
+            return EXIT_FAILURE;
+        }
+
+        fprintf(fp, "Log Start\n");
+
+        fclose(fp);
     }
+
+    printf("Log directory and files created successfully.\n");
+
     free(flags);
+
+    tpool_t* tp;
+    tp = tpool_create(threads);
+
+    for(size_t i=0; i<files; i++){
+        bool success = tpool_add_work(tp, munchLex, (void*) &params[i]);
+        if(!success){
+            printf("Couldn't add work\n");
+            return EXIT_FAILURE;
+        }
+    }
+
+    tpool_wait(tp);
+
+    tpool_destroy(tp);
+
+    for(size_t i=0; i<files; i++){
+        free(params[i].logFile);
+    }
+
     return 0;
 }

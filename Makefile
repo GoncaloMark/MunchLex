@@ -6,7 +6,7 @@ C_SRC := src/main.c src/parser.c src/threading.c src/tree.c src/flagger.c
 C_OBJS := $(C_SRC:%.c=${OUTPUT_DIR}/%.o)
 
 CCOMPILER := gcc
-CFLAGS := -c -O2 -Wall -Werror -ggdb -c -I"./src/include" -pthread
+CFLAGS := -c -O2 -Wall -Werror -ggdb -c -I"./src/include" -pthread -fsanitize=thread
 
 # compile
 
@@ -21,7 +21,7 @@ all:	clean $(OUTPUT_FILE)
 
 $(OUTPUT_FILE) : $(C_OBJS)
 	@echo Linking: $@
-	@$(CCOMPILER) -o "$(OUTPUT_FILE)" $(C_OBJS) -pthread
+	@$(CCOMPILER) -o "$(OUTPUT_FILE)" $(C_OBJS) -pthread -fsanitize=thread
 
 .PHONY: clean
 clean: 

@@ -37,7 +37,7 @@ void deleteTree(tree_t* head);
 /// @brief Print the whole tree recursively.
 /// @param node Node tree_t where it starts.
 /// @param depth Depth is the initial white space (default to 0).
-void printTree(const tree_t* node, int depth);
+void printTree(const tree_t* node, int depth, char* file);
 
 tree_t* searchNodeType(token_type_t type);
 tree_t* searchNodeContent(char* value);
