@@ -54,6 +54,12 @@ The web scraper works by using multiple threads to scrape the data from the web 
 - the 'lexer' function then identifies tokens such as tags and text, and a tree structure is generated to represent the hierarchical structure of the document. the tree structure is also stored in a log file.
 - **NOTE:** it is recommend for the user to run the scraper to understand the working of the scraper in more detail. And how does the tree structure is generated and how the lexical analysis is performed.
 
+## Future Work
+- The scraper is still in development and there are many features that are still to be implemented.
+- Daemon mode is still in development and will be implemented in the future.
+- The scraper is yet to be tested on windows systems and will be tested in the future to ensure a smooth eperience for windows users.
 
+## Conclusion
+The multi-threaded web scraper is designed to be fast and efficient. It is capable of handling large scale data extraction and processing easily and more efficiently. 
 
-
+### Proudly brought to you by the Munchlex team and the open source community ❤️
